@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Reservas</h2>
+<form action="{{ url_for('adicionar_reserva') }}" method="POST">
+    <input type="text" name="hospede" placeholder="Nome do Hóspede" required>
+    <select name="quarto_id" required>
+        <option value="" disabled selected>Escolha um quarto</option>
+        {% for quarto in quartos %}
+        {% if quarto.disponivel %}
+        <option value="{{ quarto.id }}">{{ quarto.numero }} - {{ quarto.tipo }} - R$ {{ quarto.preco }}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+    <input type="date" name="data_checkin" placeholder="Data de Check-In" required>
+    <input type="date" name="data_checkout" placeholder="Data de Check-Out" required>
+    <button type="submit">Adicionar Reserva</button>
+</form>
+
+<h3>Lista de Reservas</h3>
+<ul>
+    {% for reserva in reservas %}
+    <li>
+        {{ reserva.hospede }} - Quarto: {{ reserva.quarto.numero }} - {{ reserva.data_checkin }} a {{ reserva.data_checkout }}
+        <a href="{{ url_for('deletar_reserva', id=reserva.id) }}">Deletar</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
